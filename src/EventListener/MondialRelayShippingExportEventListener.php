@@ -16,7 +16,7 @@ final class MondialRelayShippingExportEventListener
         private FlashBagInterface $flashBag,
         private Filesystem $filesystem,
         private ObjectManager $shippingExportManager,
-        private string $shippingLabelsPath, 
+        private string $shippingLabelsPath,
         private ApiClient $client
     ) {
     }
@@ -45,12 +45,12 @@ final class MondialRelayShippingExportEventListener
         $channelBilling = $channel->getShopBillingData();
 
         $weight = $shipment->getShippingWeight();
-        if ($weight == 0 && method_exists($shipment, 'getShippingWeight')) {
-            $weight = $shipment->getShippingWeight();
+        if ($weight == 0 && method_exists($shipment, 'getWeight')) {
+            $weight = $shipment->getWeight();
         }
 
         $label = $this->client->createLabel([
-            'Poids' => (int)$weight,
+            'Poids' => (int)$weight * 1000,
             'NDossier' => (string)$shipment->getId(),
             'NClient' => (string)$shipment->getOrder()->getNumber(),
             'Expe_Langage' => $channelBilling->getCountryCode(),
