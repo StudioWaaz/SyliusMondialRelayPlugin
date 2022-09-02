@@ -4,6 +4,7 @@ ikuzo_sylius_mondial_relay:
     privateKey: Private key
     brandCode: Brand code
     labelFormat: Label PDF format
+    dropoffPickupPointId: drop off pickup point ID
     a4: A4
     '10_15': 10x15
   name: Mondial Relay

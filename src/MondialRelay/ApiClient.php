@@ -28,6 +28,7 @@ class ApiClient
             $this->signCode = $shippingGateway->getConfig()['signCode'];
             $this->privateKey = $shippingGateway->getConfig()['privateKey'];
             $this->labelFormat = $shippingGateway->getConfig()['labelFormat'];
+            $this->dropOffPickupId = (string)$shippingGateway->getConfig()['dropoffPickupPointId'];
         }
     }
 
@@ -136,7 +137,7 @@ class ApiClient
             'Exp_Valeur'    => "0",
             'Exp_Devise'    => "EUR",
             'COL_Rel_Pays'  => "",
-            'COL_Rel'       => 'AUTO',
+            'COL_Rel'       => $this->dropOffPickupId,
             'LIV_Rel_Pays'  => "",
             'LIV_Rel'       => "",
             'TAvisage'      => "",
@@ -148,6 +149,8 @@ class ApiClient
             'Texte'         => "",
 
         ], $params));
+
+        dd($params);
 
         $params['Security'] = $this->_signParams($params);
 

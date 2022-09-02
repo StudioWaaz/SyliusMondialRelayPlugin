@@ -34,10 +34,7 @@ final class MondialRelayShippingExportEventListener
             return;
         }
 
-        if (false) {
-            $this->flashBag->add('error', 'bitbag.ui.shipping_export_error');
-            return;
-        }
+
 
         $shipment = $shippingExport->getShipment();
         $shippingAddress = $shipment->getOrder()->getShippingAddress();
@@ -49,33 +46,40 @@ final class MondialRelayShippingExportEventListener
             $weight = $shipment->getWeight();
         }
 
-        $label = $this->client->createLabel([
-            'Poids' => (int)$weight * 1000,
-            'NDossier' => (string)$shipment->getId(),
-            'NClient' => (string)$shipment->getOrder()->getNumber(),
-            'Expe_Langage' => $channelBilling->getCountryCode(),
-            'Expe_Ad1' => $channelBilling->getCompany(),
-            'Expe_Ad3' => $channelBilling->getStreet(),
-            'Expe_Ville' => $channelBilling->getCity(),
-            'Expe_CP' => $channelBilling->getPostcode(),
-            'Expe_Pays' => $channelBilling->getCountryCode(),
-            'Expe_Tel1' => str_replace(' ', '', $channel->getContactPhoneNumber()),
-            'Expe_Mail' => $channel->getContactEmail(),
-            'Dest_Langage' => $shippingAddress->getCountryCode(),
-            'Dest_Ad1' => $shippingAddress->getLastName().' '.$shippingAddress->getFirstName(),
-            'Dest_Ad2' => $shippingAddress->getCompany(),
-            'Dest_Ad3' => $shippingAddress->getStreet(),
-            'Dest_Ville' => $shippingAddress->getCity(),
-            'Dest_CP' => $shippingAddress->getPostcode(),
-            'Dest_Pays' => $shippingAddress->getCountryCode(),
-            'Dest_Tel1' => str_replace(' ', '', $shippingAddress->getPhoneNumber()),
-            'Dest_Mail' => $shipment->getOrder()->getCustomer()->getEmail(),
-            'COL_Rel_Pays' => $channelBilling->getCountryCode(),
-            'LIV_Rel_Pays' => $shippingAddress->getCountryCode(),
-            'LIV_Rel' => (string)explode('---', $shipment->getPickupPointId())[1],
-            'Exp_Valeur' => $shipment->getOrder()->getItemsTotal(),
-            'Exp_Devise' => $shipment->getOrder()->getCurrencyCode()
-        ]);
+        try {
+            $label = $this->client->createLabel([
+                'Poids' => (int)$weight * 1000,
+                'NDossier' => (string)$shipment->getId(),
+                'NClient' => (string)$shipment->getOrder()->getNumber(),
+                'Expe_Langage' => $channelBilling->getCountryCode(),
+                'Expe_Ad1' => $channelBilling->getCompany(),
+                'Expe_Ad3' => $channelBilling->getStreet(),
+                'Expe_Ville' => $channelBilling->getCity(),
+                'Expe_CP' => $channelBilling->getPostcode(),
+                'Expe_Pays' => $channelBilling->getCountryCode(),
+                'Expe_Tel1' => str_replace(' ', '', $channel->getContactPhoneNumber()),
+                'Expe_Mail' => $channel->getContactEmail(),
+                'Dest_Langage' => $shippingAddress->getCountryCode(),
+                'Dest_Ad1' => $shippingAddress->getLastName().' '.$shippingAddress->getFirstName(),
+                'Dest_Ad2' => $shippingAddress->getCompany(),
+                'Dest_Ad3' => $shippingAddress->getStreet(),
+                'Dest_Ville' => $shippingAddress->getCity(),
+                'Dest_CP' => $shippingAddress->getPostcode(),
+                'Dest_Pays' => $shippingAddress->getCountryCode(),
+                'Dest_Tel1' => str_replace(' ', '', $shippingAddress->getPhoneNumber()),
+                'Dest_Mail' => $shipment->getOrder()->getCustomer()->getEmail(),
+                'COL_Rel_Pays' => "",
+                'LIV_Rel_Pays' => $shippingAddress->getCountryCode(),
+                'LIV_Rel' => (string)explode('---', $shipment->getPickupPointId())[1],
+                'Exp_Valeur' => $shipment->getOrder()->getItemsTotal(),
+                'Exp_Devise' => $shipment->getOrder()->getCurrencyCode()
+            ]);
+        } catch (\Throwable $th) {
+            if (false) {
+                $this->flashBag->add('error', $th->getMessage());
+                return;
+            }
+        }
 
         $shippingExport->getShipment()->setTracking($label['number']);
 

@@ -28,6 +28,10 @@ final class MondialRelayShippingGatewayType extends AbstractType
                     'ikuzo_sylius_mondial_relay.form.10_15' => '10x15',
                 ]
             ])
+            ->add('dropoffPickupPointId', TextType::class, [
+                'label' => 'ikuzo_sylius_mondial_relay.form.dropoffPickupPointId',
+                'required' => false
+            ])
         ;
     }
 }
