@@ -23,9 +23,12 @@ class ApiClient
             'trace' => 1,
             'encoding'=>' UTF-8'
         ]);
-        $this->signCode = $shippingGateway->getConfig()['signCode'];
-        $this->privateKey = $shippingGateway->getConfig()['privateKey'];
-        $this->labelFormat = $shippingGateway->getConfig()['labelFormat'];
+
+        if ($shippingGateway instanceof ShippingGatewayInterface) {
+            $this->signCode = $shippingGateway->getConfig()['signCode'];
+            $this->privateKey = $shippingGateway->getConfig()['privateKey'];
+            $this->labelFormat = $shippingGateway->getConfig()['labelFormat'];
+        }
     }
 
     public function findDeliveryPoints(array $params): iterable
