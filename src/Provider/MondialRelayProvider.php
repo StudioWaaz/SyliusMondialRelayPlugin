@@ -73,7 +73,11 @@ final class MondialRelayProvider extends Provider
 
     public function findPickupPoint(PickupPointCode $code): ?PickupPointInterface
     {
-        $point = $this->client->findOneDeviveryPoint($code->getIdPart());
+        $point = $this->client->findOneDeviveryPoint([
+            'Enseigne' => $this->signCode,
+            'Pays' => "FR",
+            'NumPointRelais' => $code->getIdPart()
+        ]);
 
         if ($point) {
             $pickupPoint = $this->pickupPointFactory->createNew();

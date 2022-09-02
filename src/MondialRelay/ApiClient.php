@@ -70,12 +70,12 @@ class ApiClient
         }
     }
 
-    public function findOneDeviveryPoint(string $pointId): ?array
+    public function findOneDeviveryPoint(array $params): ?array
     {
         $params = array_merge([
             'Enseigne' => $this->signCode,
             'Pays' => "FR",
-            'NumPointRelais' => $pointId
+            'NumPointRelais' => ""
         ], $params);
 
         foreach ($results->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $point) {
