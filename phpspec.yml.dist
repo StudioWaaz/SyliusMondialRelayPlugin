@@ -1,0 +1,4 @@
+suites:
+    main:
+        namespace: Ikuzo\SyliusMondialRelayPlugin
+        psr4_prefix: Ikuzo\SyliusMondialRelayPlugin

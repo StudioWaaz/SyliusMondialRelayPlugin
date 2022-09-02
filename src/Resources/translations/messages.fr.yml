@@ -1,0 +1,9 @@
+ikuzo_sylius_mondial_relay:
+  form:
+    signCode: Code enseigne
+    privateKey: Clé privé
+    brandCode: Code marque
+    labelFormat: Format des étiquettes
+    a4: A4
+    '10_15': 10x15
+  name: Mondial Relay
