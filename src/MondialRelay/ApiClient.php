@@ -78,6 +78,8 @@ class ApiClient
             'NumPointRelais' => ""
         ], $params);
 
+        $results = $this->client->WSI4_PointRelais_Recherche($params);
+
         foreach ($results->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $point) {
             return [
                 'id' => $point->Num,
