@@ -70,6 +70,30 @@ class ApiClient
         }
     }
 
+    public function findOneDeviveryPoint(string $pointId): ?array
+    {
+        $params = array_merge([
+            'Enseigne' => $this->signCode,
+            'Pays' => "FR",
+            'NumPointRelais' => $pointId
+        ], $params);
+
+        foreach ($results->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $point) {
+            return [
+                'id' => $point->Num,
+                'name' => $point->LgAdr1,
+                'address' => $point->LgAdr3,
+                'postCode' => $point->CP,
+                'city' => $point->Ville,
+                'country' => $point->Pays,
+                'lat' => $point->Latitude,
+                'long' => $point->Longitude
+            ];
+        }
+
+        return null;
+    }
+
     public function createLabel(array $params) 
     {
         $params = $this->_clean(array_merge([
