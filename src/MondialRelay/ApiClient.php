@@ -80,23 +80,24 @@ class ApiClient
 
         $results = $this->client->WSI4_PointRelais_Recherche($params);
 
-        foreach ($results->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details as $point) {
-            return [
-                'id' => $point->Num,
-                'name' => $point->LgAdr1,
-                'address' => $point->LgAdr3,
-                'postCode' => $point->CP,
-                'city' => $point->Ville,
-                'country' => $point->Pays,
-                'lat' => $point->Latitude,
-                'long' => $point->Longitude
-            ];
+        if ($results->WSI4_PointRelais_RechercheResult->STAT != 0) {
+            return null;
         }
 
-        return null;
+        $point = $results->WSI4_PointRelais_RechercheResult->PointsRelais->PointRelais_Details;
+        return [
+            'id' => $point->Num,
+            'name' => $point->LgAdr1,
+            'address' => $point->LgAdr3,
+            'postCode' => $point->CP,
+            'city' => $point->Ville,
+            'country' => $point->Pays,
+            'lat' => $point->Latitude,
+            'long' => $point->Longitude
+        ];
     }
 
-    public function createLabel(array $params) 
+    public function createLabel(array $params)
     {
         $params = $this->_clean(array_merge([
             'Enseigne'      => $this->signCode,
@@ -160,7 +161,7 @@ class ApiClient
         }
 
         throw new \Exception("Error while generating label request: STAT={$result->WSI2_CreationEtiquetteResult->STAT}", 1);
-        
+
     }
 
     private function _setLabelFormat(string $url): string
@@ -188,7 +189,7 @@ class ApiClient
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
             'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y'   
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y'
         ];
 
         foreach ($params as $key => $value) {
