@@ -150,8 +150,6 @@ class ApiClient
 
         ], $params));
 
-        dd($params);
-
         $params['Security'] = $this->_signParams($params);
 
         $result = $this->client->WSI2_CreationEtiquette($params);
