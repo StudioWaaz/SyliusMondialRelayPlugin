@@ -48,7 +48,7 @@ final class MondialRelayShippingExportEventListener
 
         try {
             $label = $this->client->createLabel([
-                'Poids' => (int)$weight * 1000,
+                'Poids' => (int)($weight * 1000),
                 'NDossier' => (string)$shipment->getId(),
                 'NClient' => (string)$shipment->getOrder()->getNumber(),
                 'Expe_Langage' => $channelBilling->getCountryCode(),
