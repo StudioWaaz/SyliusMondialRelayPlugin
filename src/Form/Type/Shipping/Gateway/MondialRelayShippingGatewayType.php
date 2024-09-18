@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Intl\Countries;
+
 
 final class MondialRelayShippingGatewayType extends AbstractType
 {
@@ -167,7 +169,7 @@ final class MondialRelayShippingGatewayType extends AbstractType
                         'callback' => [$this, 'labelCountryValidation']
                     ]),
                 ],
-                'choices' => array_flip(Intl::getRegionBundle()->getCountryNames()),
+                'choices' => array_flip(Countries::getNames()),
             ])
             ->add('label_shipper_phone_number', TextType::class, [
                 'label' => 'mondial_relay.form.shipping_gateway.label_shipper_phone_number',
