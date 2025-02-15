@@ -6,10 +6,10 @@ services:
     class: Ikuzo\SyliusMondialRelayPlugin\Form\Type\MondialRelayShippingGatewayType
     tags:
       - { name: bitbag.shipping_gateway_configuration_type, type: "mondial_relay", label: Mondial Relay }
-  
+
   ikuzo_sylius_mondial_relay.provider.mondial_relay:
     class: Ikuzo\SyliusMondialRelayPlugin\Provider\MondialRelayProvider
-    arguments: 
+    arguments:
       - '@ikuzo_sylius_mondial_relay.mondial_relay.api_client'
       - '@setono_sylius_pickup_point.factory.pickup_point'
     tags:
@@ -17,14 +17,14 @@ services:
 
   ikuzo_sylius_mondial_relay.mondial_relay.api_client:
     class: Ikuzo\SyliusMondialRelayPlugin\MondialRelay\ApiClient
-    arguments: 
+    arguments:
       - '%ikuzo_sylius_mondial_relay.api.wdsl%'
       - "@bitbag.repository.shipping_gateway"
-  
+
   ikuzo_sylius_mondial_relay.event_listener.mondial_relay_shipping_export:
     class: Ikuzo\SyliusMondialRelayPlugin\EventListener\MondialRelayShippingExportEventListener
     arguments:
-        - '@session.flash_bag'
+        - '@session'
         - '@filesystem'
         - '@bitbag.manager.shipping_export'
         - '%bitbag.shipping_labels_path%'

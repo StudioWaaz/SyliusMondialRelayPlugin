@@ -6,14 +6,14 @@ use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Webmozart\Assert\Assert;
 use Ikuzo\SyliusMondialRelayPlugin\MondialRelay\ApiClient;
 
 final class MondialRelayShippingExportEventListener
 {
     public function __construct(
-        private FlashBagInterface $flashBag,
+        private SessionInterface $session,
         private Filesystem $filesystem,
         private ObjectManager $shippingExportManager,
         private string $shippingLabelsPath,
@@ -33,8 +33,6 @@ final class MondialRelayShippingExportEventListener
         if ('mondial_relay' !== $shippingGateway->getCode()) {
             return;
         }
-
-
 
         $shipment = $shippingExport->getShipment();
         $shippingAddress = $shipment->getOrder()->getShippingAddress();
@@ -75,15 +73,13 @@ final class MondialRelayShippingExportEventListener
                 'Exp_Devise' => $shipment->getOrder()->getCurrencyCode()
             ]);
         } catch (\Throwable $th) {
-            if (false) {
-                $this->flashBag->add('error', $th->getMessage());
-                return;
-            }
+            $this->session->getFlashBag()->add('error', $th->getMessage());
+            return;
         }
 
         $shippingExport->getShipment()->setTracking($label['number']);
 
-        $this->flashBag->add('success', 'bitbag.ui.shipment_data_has_been_exported'); // Add success notification
+        $this->session->getFlashBag()->add('success', 'bitbag.ui.shipment_data_has_been_exported'); // Add success notification
         $this->saveShippingLabel($shippingExport, $label['pdfUrl'], 'pdf'); // Save label
         $this->markShipmentAsExported($shippingExport); // Mark shipment as "Exported"
     }
