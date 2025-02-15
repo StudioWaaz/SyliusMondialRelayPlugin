@@ -24,7 +24,7 @@ services:
   ikuzo_sylius_mondial_relay.event_listener.mondial_relay_shipping_export:
     class: Ikuzo\SyliusMondialRelayPlugin\EventListener\MondialRelayShippingExportEventListener
     arguments:
-        - '@session'
+        - '@request_stack'
         - '@filesystem'
         - '@bitbag.manager.shipping_export'
         - '%bitbag.shipping_labels_path%'
