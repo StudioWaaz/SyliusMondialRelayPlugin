@@ -39,9 +39,9 @@ final class MondialRelayShippingExportEventListener
         $channel = $shipment->getOrder()->getChannel();
         $channelBilling = $channel->getShopBillingData();
 
-        $weight = $shipment->getShippingWeight();
-        if ($weight == 0 && method_exists($shipment, 'getWeight')) {
-            $weight = $shipment->getWeight();
+        $weight = 0;
+        foreach ($shipment->getOrder()->getItems() as $item) {
+            $weight += $item->getQuantity() * $item->getVariant()->getWeight();
         }
 
         try {
