@@ -39,10 +39,7 @@ final class MondialRelayShippingExportEventListener
         $channel = $shipment->getOrder()->getChannel();
         $channelBilling = $channel->getShopBillingData();
 
-        $weight = 0;
-        foreach ($shipment->getOrder()->getItems() as $item) {
-            $weight += $item->getQuantity() * $item->getVariant()->getWeight();
-        }
+        $weight = $shipment->getShippingWeight();
 
         try {
             $label = $this->client->createLabel([
